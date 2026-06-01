@@ -24,13 +24,13 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product findById(Long id) {
         return productRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다: " + id));
+                .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다: " + id));
     }
 
     @Transactional
     public Product save(ProductDto dto) {
         Product product = new Product(
-            dto.getName(), dto.getPrice(), dto.getDescription(), dto.getStock()
+                dto.getName(), dto.getPrice(), dto.getDescription(), dto.getStock()
         );
         return productRepository.save(product);
     }

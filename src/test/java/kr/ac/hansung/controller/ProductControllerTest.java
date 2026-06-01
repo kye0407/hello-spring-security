@@ -44,9 +44,9 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders
-            .webAppContextSetup(wac)
-            .apply(SecurityMockMvcConfigurers.springSecurity())
-            .build();
+                .webAppContextSetup(wac)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build();
     }
 
     @Test
@@ -54,13 +54,13 @@ class ProductControllerTest {
     @DisplayName("인증된 사용자 - 상품 목록 조회 성공 (200)")
     void listProducts_authenticated_returns200() throws Exception {
         given(productService.findAll()).willReturn(List.of(
-            new Product("Spring Boot 4 교재", 35000, "실습서", 50)
+                new Product("Spring Boot 4 교재", 35000, "실습서", 50)
         ));
 
         mockMvc.perform(get("/products"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("products/list"))
-            .andExpect(model().attributeExists("products"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/list"))
+                .andExpect(model().attributeExists("products"));
     }
 
     @Test
@@ -68,8 +68,8 @@ class ProductControllerTest {
     @DisplayName("비인증 사용자 - 상품 목록 접근 시 로그인 페이지로 리다이렉트")
     void listProducts_anonymous_redirectsToLogin() throws Exception {
         mockMvc.perform(get("/products"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/login"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
@@ -77,9 +77,9 @@ class ProductControllerTest {
     @DisplayName("ADMIN - 상품 등록 폼 조회 성공 (200)")
     void addForm_admin_returns200() throws Exception {
         mockMvc.perform(get("/products/add"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("products/add"))
-            .andExpect(model().attributeExists("product"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/add"))
+                .andExpect(model().attributeExists("product"));
     }
 
     @Test
@@ -87,7 +87,7 @@ class ProductControllerTest {
     @DisplayName("일반 USER - 상품 등록 폼 접근 시 403 (권한 없음)")
     void addForm_user_returns403() throws Exception {
         mockMvc.perform(get("/products/add"))
-            .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -95,17 +95,17 @@ class ProductControllerTest {
     @DisplayName("ADMIN - 상품 등록 POST 후 목록으로 리다이렉트")
     void saveProduct_admin_redirectsToList() throws Exception {
         given(productService.save(any())).willReturn(
-            new Product("테스트 상품", 15000, "설명", 10)
+                new Product("테스트 상품", 15000, "설명", 10)
         );
 
         mockMvc.perform(post("/products")
-                .with(csrf())
-                .param("name", "테스트 상품")
-                .param("price", "15000")
-                .param("description", "테스트 설명")
-                .param("stock", "10"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/products"));
+                        .with(csrf())
+                        .param("name", "테스트 상품")
+                        .param("price", "15000")
+                        .param("description", "테스트 설명")
+                        .param("stock", "10"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
     }
 
     @Test
@@ -113,11 +113,11 @@ class ProductControllerTest {
     @DisplayName("일반 USER - 상품 등록 POST 시 403 (권한 없음)")
     void saveProduct_user_returns403() throws Exception {
         mockMvc.perform(post("/products")
-                .with(csrf())
-                .param("name", "테스트 상품")
-                .param("price", "15000")
-                .param("stock", "10"))
-            .andExpect(status().isForbidden());
+                        .with(csrf())
+                        .param("name", "테스트 상품")
+                        .param("price", "15000")
+                        .param("stock", "10"))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -127,8 +127,8 @@ class ProductControllerTest {
         willDoNothing().given(productService).deleteById(1L);
 
         mockMvc.perform(post("/products/1/delete")
-                .with(csrf()))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/products"));
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
     }
 }
